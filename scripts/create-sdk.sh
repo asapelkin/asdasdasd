@@ -28,7 +28,7 @@ BUILD_PACKAGES=(
     libffi-dev
     libreadline-dev
     libsqlite3-dev
-    libncurses5-dev
+    libncurses-dev
     libbz2-dev
     liblzma-dev
     libexpat1-dev
@@ -79,6 +79,7 @@ create_sdk() {
     debootstrap \
         --variant=buildd \
         --arch=amd64 \
+        --components=main,universe \
         --include="$INCLUDE" \
         "$UBUNTU_RELEASE" \
         "$DEST" \
