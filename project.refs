@@ -1,12 +1,10 @@
 # BuildStream source refs
 #
 # Source refs are populated by:
-#   bst source track components/qemu.bst components/python3.bst
+#   bst source track components/python3.bst
 #
 # Commit this file after updating to ensure reproducible builds.
 projects:
   minimal-linux:
-    components/qemu.bst:
-    - ref: 32708ac66c30d8c892633ea968c771c1c76d597d70ddead21a0d22ccf386da69
     components/python3.bst:
     - ref: f6650f9ad73359051f3e558c2431a109bc016664

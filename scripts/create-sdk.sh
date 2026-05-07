@@ -33,25 +33,36 @@ BUILD_PACKAGES=(
     liblzma-dev
     libexpat1-dev
     uuid-dev
-    # QEMU build deps
-    libglib2.0-dev
-    libpixman-1-dev
     ninja-build
     meson
     python3
     python3-pip
-    libslirp-dev
-    libcap-ng-dev
-    libseccomp-dev
 )
 
 TARGET="${1:-all}"
 
+rootfs_ready() {
+    local DEST="$1"
+    [ -d "$DEST" ] && [ -d "$DEST/etc" ] && [ -d "$DEST/usr" ] && [ -e "$DEST/usr/bin/env" ]
+}
+
+sdk_ready() {
+    local DEST="$1"
+    rootfs_ready "$DEST" \
+        && [ -x "$DEST/usr/bin/meson" ] \
+        && [ -f "$DEST/usr/include/openssl/ssl.h" ] \
+        && { [ -f "$DEST/usr/include/ffi.h" ] || [ -f "$DEST/usr/include/x86_64-linux-gnu/ffi.h" ]; }
+}
+
 create_ubuntu_base() {
     local DEST="$FILES_DIR/ubuntu-base"
-    if [ -d "$DEST" ]; then
+    if rootfs_ready "$DEST"; then
         echo "[ubuntu-base] Already exists at $DEST, skipping."
         return
+    fi
+    if [ -d "$DEST" ]; then
+        echo "[ubuntu-base] Removing incomplete rootfs at $DEST before recreating."
+        rm -rf "$DEST"
     fi
     echo "[ubuntu-base] Creating minimal Ubuntu 24.04 rootfs via debootstrap..."
     mkdir -p "$DEST"
@@ -66,9 +77,13 @@ create_ubuntu_base() {
 
 create_sdk() {
     local DEST="$FILES_DIR/sdk"
-    if [ -d "$DEST" ]; then
+    if sdk_ready "$DEST"; then
         echo "[sdk] Already exists at $DEST, skipping."
         return
+    fi
+    if [ -d "$DEST" ]; then
+        echo "[sdk] Removing incomplete rootfs at $DEST before recreating."
+        rm -rf "$DEST"
     fi
     local IFS=','
     local INCLUDE="${BUILD_PACKAGES[*]}"
@@ -97,5 +112,5 @@ esac
 
 echo ""
 echo "Done. You can now build with BuildStream:"
-echo "  bst source track components/qemu.bst components/python3.bst"
+echo "  bst source track components/python3.bst"
 echo "  bst build image/system.bst"

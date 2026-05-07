@@ -5,7 +5,7 @@ description: |
 
   Source: https://github.com/python/cpython, tag v3.12.3
   The git ref is stored in project.refs and updated by:
-    bst source track components/qemu.bst components/python3.bst
+    bst source track components/python3.bst
 
   Installs to /usr inside the element artifact.
 

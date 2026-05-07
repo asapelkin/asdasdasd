@@ -45,7 +45,7 @@ jobs:
 
       # ── Source refs ──────────────────────────────────────────────────────
       - name: Track source refs
-        run: bst source track components/qemu.bst components/python3.bst
+        run: bst source track components/python3.bst
 
       # ── Build ─────────────────────────────────────────────────────────────
       - name: Build system image
@@ -75,7 +75,6 @@ jobs:
 
             Minimal Linux distribution based on Ubuntu 24.04 with:
             - **Python 3.12** – built from source (CPython)
-            - **QEMU 9.0** – built from source (x86_64 system + user-mode emulation)
 
             Built with [BuildStream](https://buildstream.build/) orchestrator.
 

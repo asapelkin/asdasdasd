@@ -48,7 +48,7 @@ ownership: files/ubuntu-base files/sdk
 # ── Source refs ──────────────────────────────────────────────────────────────
 
 sources: prereqs sandbox ownership
-	bst source track components/qemu.bst components/python3.bst
+	bst source track components/python3.bst
 
 # ── Build ─────────────────────────────────────────────────────────────────────
 
