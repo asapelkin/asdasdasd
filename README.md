@@ -103,7 +103,7 @@ tar -czf minimal-linux.tar.gz -C output .
 You can also use the Makefile shortcuts:
 
 ```bash
-make all      # runs steps 1-4
+make all      # installs missing prerequisites, then runs steps 1-4
 make build    # build only
 make checkout # export image to output/
 make clean    # remove output/
