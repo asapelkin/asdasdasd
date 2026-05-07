@@ -26,7 +26,7 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y --no-install-recommends bubblewrap debootstrap
-          pip install 'BuildStream>=2.0' buildstream-plugins ruamel.yaml
+          pip install -r requirements.txt
 
       # ── Build environment ─────────────────────────────────────────────────
       # Create the Ubuntu 24.04 base and SDK rootfs trees used as local
