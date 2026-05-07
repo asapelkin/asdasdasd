@@ -26,8 +26,3 @@ variables:
     --without-static-libpython
     --with-system-expat
     --with-system-ffi
-
-# GitHub Actions runners block RTM_NEWADDR in new network namespaces.
-# Share the host network namespace so bwrap skips loopback setup.
-sandbox:
-  network-access: true

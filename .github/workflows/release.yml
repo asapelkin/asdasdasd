@@ -30,6 +30,12 @@ jobs:
           sudo apt-get install -y --no-install-recommends bubblewrap debootstrap
           pip install -r requirements.txt
 
+      # Ubuntu 24.04 restricts unprivileged user namespaces by default (AppArmor).
+      # buildbox-run uses bwrap which needs to create network namespaces; without
+      # this sysctl, bwrap fails with "RTM_NEWADDR: Operation not permitted".
+      - name: Allow unprivileged user namespaces (needed by buildbox-run/bwrap)
+        run: sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0
+
       # ── Build environment ─────────────────────────────────────────────────
       - name: Create Ubuntu base and SDK rootfs
         run: sudo bash scripts/create-sdk.sh
