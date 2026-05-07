@@ -1,0 +1,3 @@
+BuildStream>=2.0
+buildstream-plugins>=2.0
+ruamel.yaml

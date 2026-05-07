@@ -1,0 +1,17 @@
+# Generated build artifacts – these are created locally by make/CI and must not be committed
+
+# Local source directories created by scripts/create-sdk.sh
+# (large Ubuntu rootfs trees; recreated via 'make files/sdk' etc.)
+files/
+
+# BuildStream artifact cache
+.bst/
+
+# Checked-out image and release archives
+output/
+minimal-linux*.tar.gz
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.pyo
