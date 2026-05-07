@@ -42,17 +42,17 @@ jobs:
         run: python3 scripts/fetch-refs.py
 
       - name: Track CPython git ref
-        run: bst source track elements/components/python3.bst
+        run: bst source track components/python3.bst
 
       # ── Build ─────────────────────────────────────────────────────────────
       - name: Build system image
-        run: bst build elements/image/system.bst
+        run: bst build image/system.bst
 
       # ── Artifact ─────────────────────────────────────────────────────────
       - name: Check out assembled image
         run: |
           mkdir -p output
-          bst artifact checkout elements/image/system.bst --directory output/
+          bst artifact checkout image/system.bst --directory output/
 
       - name: Create system image tarball
         run: |

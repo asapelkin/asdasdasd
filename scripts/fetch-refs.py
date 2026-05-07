@@ -7,7 +7,7 @@ Usage:
     python3 scripts/fetch-refs.py
 
 After running this script, also run:
-    bst source track elements/components/python3.bst
+    bst source track components/python3.bst
 to populate the git ref for CPython.
 """
 
@@ -110,7 +110,7 @@ def main() -> None:
     print(f"\nWrote ref for {QEMU_ELEMENT} to {PROJECT_REFS}")
 
     print("\nNext step:")
-    print("  bst source track elements/components/python3.bst")
+    print("  bst source track components/python3.bst")
 
 
 if __name__ == "__main__":

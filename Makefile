@@ -25,18 +25,18 @@ files/sdk:
 
 sources: files/ubuntu-base files/sdk
 	python3 scripts/fetch-refs.py
-	bst source track elements/components/python3.bst
+	bst source track components/python3.bst
 
 # ── Build ─────────────────────────────────────────────────────────────────────
 
 build: files/ubuntu-base files/sdk
-	bst build elements/image/system.bst
+	bst build image/system.bst
 
 # ── Checkout ─────────────────────────────────────────────────────────────────
 
 checkout: build
 	mkdir -p output
-	bst artifact checkout elements/image/system.bst --directory output/
+	bst artifact checkout image/system.bst --directory output/
 	@echo "Image checked out to output/"
 
 # ── All ──────────────────────────────────────────────────────────────────────

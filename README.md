@@ -79,13 +79,13 @@ This uses `debootstrap` to create two Ubuntu 24.04 root filesystems:
 python3 scripts/fetch-refs.py
 
 # Track the latest CPython v3.12.x git commit
-bst source track elements/components/python3.bst
+bst source track components/python3.bst
 ```
 
 ### 3 – Build
 
 ```bash
-bst build elements/image/system.bst
+bst build image/system.bst
 ```
 
 The first build compiles Python and QEMU from source inside BuildStream's
@@ -96,7 +96,7 @@ cache and are nearly instant.
 
 ```bash
 mkdir -p output
-bst artifact checkout elements/image/system.bst --directory output/
+bst artifact checkout image/system.bst --directory output/
 tar -czf minimal-linux.tar.gz -C output .
 ```
 

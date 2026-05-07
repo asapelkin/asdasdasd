@@ -9,7 +9,7 @@ description: |
     - components/qemu    : QEMU 9.0 emulator (built from source)
 
   To check out the assembled image:
-    bst artifact checkout elements/image/system.bst --directory output/
+    bst artifact checkout image/system.bst --directory output/
 
 depends:
   - base/ubuntu.bst
