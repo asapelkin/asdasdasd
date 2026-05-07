@@ -38,3 +38,8 @@ config:
           --disable-sdl \
           --disable-opengl \
           --disable-werror
+
+# GitHub Actions runners block RTM_NEWADDR in new network namespaces.
+# Share the host network namespace so bwrap skips loopback setup.
+sandbox:
+  network-access: true
