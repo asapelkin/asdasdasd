@@ -22,6 +22,7 @@ BUILD_PACKAGES=(
     build-essential
     pkg-config
     git
+    llvm
     # Python build deps
     libssl-dev
     zlib1g-dev

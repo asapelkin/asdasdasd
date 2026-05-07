@@ -64,7 +64,7 @@ This uses `debootstrap` to create two Ubuntu 24.04 root filesystems:
 
 - `files/ubuntu-base/` — minimal rootfs for the runtime image
 - `files/sdk/` — rootfs with build tools (`build-essential`, `libssl-dev`,
-  `libffi-dev`, `meson`, `ninja-build`, etc.)
+  `libffi-dev`, `llvm`, `meson`, `ninja-build`, etc.)
 
 ### 2 – Populate source refs
 
