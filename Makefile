@@ -58,6 +58,7 @@ build: prereqs sandbox ownership
 # ── Checkout ─────────────────────────────────────────────────────────────────
 
 checkout: build
+	rm -rf output
 	mkdir -p output
 	bst artifact checkout image/system.bst --directory output/
 	@echo "Image checked out to output/"

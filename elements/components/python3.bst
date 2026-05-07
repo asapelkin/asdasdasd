@@ -19,6 +19,10 @@ sources:
 
 variables:
   # Extra configure flags specific to CPython
-  conf-local: >-
-    --enable-optimizations --with-lto --with-ensurepip=install
-    --without-static-libpython --with-system-expat --with-system-ffi
+  conf-local: |
+    --enable-optimizations \
+    --with-lto \
+    --with-ensurepip=install \
+    --without-static-libpython \
+    --with-system-expat \
+    --with-system-ffi
