@@ -1,0 +1,66 @@
+name: Build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build system image
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # ── BuildStream setup ────────────────────────────────────────────────
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Install BuildStream and plugins
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends bubblewrap debootstrap
+          pip install 'BuildStream>=2.0' buildstream-plugins ruamel.yaml
+
+      # ── Build environment ─────────────────────────────────────────────────
+      # Create the Ubuntu 24.04 base and SDK rootfs trees used as local
+      # BuildStream sources for the build environment.
+      - name: Create Ubuntu base and SDK rootfs
+        run: sudo bash scripts/create-sdk.sh
+
+      - name: Fix ownership of generated directories
+        run: sudo chown -R "$USER:$USER" files/
+
+      # ── Source refs ──────────────────────────────────────────────────────
+      - name: Compute QEMU tarball SHA-256 ref
+        run: python3 scripts/fetch-refs.py
+
+      - name: Track CPython git ref
+        run: bst source track elements/components/python3.bst
+
+      # ── Build ─────────────────────────────────────────────────────────────
+      - name: Build system image
+        run: bst build elements/image/system.bst
+
+      # ── Artifact ─────────────────────────────────────────────────────────
+      - name: Check out assembled image
+        run: |
+          mkdir -p output
+          bst artifact checkout elements/image/system.bst --directory output/
+
+      - name: Create system image tarball
+        run: |
+          tar -czf minimal-linux-$(git rev-parse --short HEAD).tar.gz -C output .
+
+      - name: Upload image artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: minimal-linux-image
+          path: minimal-linux-*.tar.gz
+          retention-days: 14

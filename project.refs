@@ -1,0 +1,11 @@
+# BuildStream source refs
+#
+# Git refs are populated by:
+#   bst source track elements/components/python3.bst
+#
+# Tar refs are populated by:
+#   python3 scripts/fetch-refs.py
+#
+# Commit this file after updating to ensure reproducible builds.
+projects:
+  minimal-linux: {}
