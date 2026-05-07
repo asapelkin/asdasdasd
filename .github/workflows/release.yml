@@ -38,11 +38,8 @@ jobs:
         run: sudo chown -R "$USER:$USER" files/
 
       # ── Source refs ──────────────────────────────────────────────────────
-      - name: Compute QEMU tarball SHA-256 ref
-        run: python3 scripts/fetch-refs.py
-
-      - name: Track CPython git ref
-        run: bst source track components/python3.bst
+      - name: Track source refs
+        run: bst source track components/qemu.bst components/python3.bst
 
       # ── Build ─────────────────────────────────────────────────────────────
       - name: Build system image
