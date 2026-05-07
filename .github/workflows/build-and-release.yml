@@ -1,0 +1,44 @@
+name: build-and-release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install BuildStream
+        run: |
+          python3 -m pip install --upgrade pip
+          pip3 install buildstream
+
+      - name: Build image element
+        run: |
+          bst --version
+          bst build image.bst
+
+      - name: Checkout artifact
+        run: |
+          mkdir -p out
+          bst artifact checkout image.bst --directory out/rootfs
+          tar -C out -czf ubuntu-mini-poc-rootfs.tar.gz rootfs
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ubuntu-mini-poc-rootfs
+          path: ubuntu-mini-poc-rootfs.tar.gz
+
+      - name: Publish GitHub Release (tags only)
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: ubuntu-mini-poc-rootfs.tar.gz
+          generate_release_notes: true
