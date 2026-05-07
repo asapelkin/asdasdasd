@@ -9,7 +9,7 @@ Pre-POC repository that uses **BuildStream** as the orchestrator to assemble a m
 ## Build locally
 
 ```bash
-pip install buildstream
+python3 -m pip install buildstream
 bst build image.bst
 bst artifact checkout image.bst --directory out/rootfs
 ```
@@ -25,7 +25,7 @@ tar -C out -czf ubuntu-mini-poc-rootfs.tar.gz rootfs
 Workflow: `.github/workflows/build-and-release.yml`
 
 - Manual run via `workflow_dispatch`
-- Automatic run on tags `v*`
+- Automatic run on pull requests to `main`, pushes to `main`, and tags `v*`
 - Uploads `ubuntu-mini-poc-rootfs.tar.gz` as action artifact
 - On tags, publishes asset to GitHub Releases
 

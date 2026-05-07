@@ -9,6 +9,7 @@ on:
       - main
     tags:
       - 'v*'
+  workflow_dispatch:
 
 jobs:
   build:
@@ -23,12 +24,12 @@ jobs:
           python3 -m pip install buildstream
 
       - name: Build image element
-        run: bst build elements/image.bst
+        run: bst build image.bst
 
       - name: Checkout built artifact
         run: |
           mkdir -p out
-          bst artifact checkout elements/image.bst --directory out/rootfs
+          bst artifact checkout image.bst --directory out/rootfs
           tar -C out/rootfs -czf out/ubuntu-mini-poc-rootfs.tar.gz .
 
       - name: Upload workflow artifact
