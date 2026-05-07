@@ -45,7 +45,7 @@ jobs:
 
       # ── Source refs ──────────────────────────────────────────────────────
       - name: Track source refs
-        run: bst source track components/python3.bst
+        run: bst source track components/python3.bst components/llvm.bst
 
       # ── Build ─────────────────────────────────────────────────────────────
       - name: Build system image
@@ -75,6 +75,7 @@ jobs:
 
             Minimal Linux distribution based on Ubuntu 24.04 with:
             - **Python 3.12** – built from source (CPython)
+            - **LLVM** – built from source
 
             Built with [BuildStream](https://buildstream.build/) orchestrator.
 

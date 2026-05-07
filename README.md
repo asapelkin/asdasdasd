@@ -3,7 +3,7 @@
 [![Build](https://github.com/asapelkin/asdasdasd/actions/workflows/build.yml/badge.svg)](https://github.com/asapelkin/asdasdasd/actions/workflows/build.yml)
 
 A minimal Linux distribution based on **Ubuntu 24.04** (Noble Numbat) with
-**Python** compiled from source, orchestrated by
+**Python** and **LLVM** compiled from source, orchestrated by
 [BuildStream](https://buildstream.build/).
 
 ## What's included
@@ -13,6 +13,7 @@ A minimal Linux distribution based on **Ubuntu 24.04** (Noble Numbat) with
 | Base OS   | Ubuntu 24.04 | `debootstrap --variant=minbase` |
 | Build SDK | Ubuntu 24.04 + dev tools | `debootstrap --variant=buildd` |
 | Python    | 3.12.x  | Compiled from CPython git source |
+| LLVM      | 18.1.x  | Compiled from llvm-project git source |
 
 ---
 
@@ -27,8 +28,9 @@ elements/
     sdk.bst              Ubuntu 24.04 SDK with build tools (local source)
   components/
     python3.bst          CPython 3.12 – autotools build against sdk.bst
+    llvm.bst             LLVM 18.1 – CMake build against sdk.bst
   image/
-    system.bst           Final image: ubuntu + python3 (stack)
+    system.bst           Final image: ubuntu + python3 + llvm (stack)
 scripts/
   create-sdk.sh          Create files/ubuntu-base/ and files/sdk/ via debootstrap
 Makefile                 Convenience build targets
@@ -64,13 +66,13 @@ This uses `debootstrap` to create two Ubuntu 24.04 root filesystems:
 
 - `files/ubuntu-base/` — minimal rootfs for the runtime image
 - `files/sdk/` — rootfs with build tools (`build-essential`, `libssl-dev`,
-  `libffi-dev`, `llvm`, `meson`, `ninja-build`, etc.)
+  `libffi-dev`, `cmake`, `meson`, `ninja-build`, etc.)
 
 ### 2 – Populate source refs
 
 ```bash
 # Refresh the exact refs stored in project.refs
-bst source track components/python3.bst
+bst source track components/python3.bst components/llvm.bst
 ```
 
 Committed `project.refs` entries are already included in the repository, so
@@ -82,7 +84,7 @@ normal builds do not need this step unless you want to update source versions.
 bst build image/system.bst
 ```
 
-The first build compiles Python from source inside BuildStream's
+The first build compiles Python and LLVM from source inside BuildStream's
 isolated sandbox (powered by bubblewrap). Subsequent builds reuse the artifact
 cache and are nearly instant.
 
@@ -133,25 +135,26 @@ The release workflow will:
 │                   elements/image/system.bst                      │
 │                       (stack element)                             │
 │                                                                   │
-│  ┌──────────────────┐  ┌────────────────┐                       │
-│  │  base/ubuntu     │  │ components/    │                       │
-│  │  Ubuntu 24.04    │  │ python3        │                       │
-│  │  minimal rootfs  │  │ CPython 3.12   │                       │
-│  │  (runtime base)  │  │ from source    │                       │
-│  └──────────────────┘  └───────┬────────┘                       │
-│                                │ build-dep                      │
-│                         ┌──────▼──────────────────────────┐     │
-│                         │         base/sdk                 │     │
-│                         │  Ubuntu 24.04 + build tools      │     │
-│                         │  (GCC, libssl, libffi, meson…)   │     │
-│                         └──────────────────────────────────┘     │
+│  ┌──────────────────┐  ┌────────────────┐  ┌────────────────┐   │
+│  │  base/ubuntu     │  │ components/    │  │ components/    │   │
+│  │  Ubuntu 24.04    │  │ python3        │  │ llvm           │   │
+│  │  minimal rootfs  │  │ CPython 3.12   │  │ LLVM 18.1      │   │
+│  │  (runtime base)  │  │ from source    │  │ from source    │   │
+│  └──────────────────┘  └───────┬────────┘  └───────┬────────┘   │
+│                                │ build-dep         │ build-dep   │
+│                         ┌──────▼──────────────────────────┐       │
+│                         │         base/sdk                 │       │
+│                         │  Ubuntu 24.04 + build tools      │       │
+│                         │  (GCC, cmake, meson, ninja…)     │       │
+│                         └──────────────────────────────────┘       │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
 **Build flow**:
 1. `base/sdk.bst` imports the Ubuntu 24.04 SDK rootfs as the build environment
 2. `components/python3.bst` compiles CPython inside the SDK sandbox
-3. `image/system.bst` merges the Ubuntu base + Python into one image
+3. `components/llvm.bst` compiles LLVM inside the SDK sandbox
+4. `image/system.bst` merges the Ubuntu base + Python + LLVM into one image
 
 ---
 

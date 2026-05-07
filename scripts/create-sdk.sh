@@ -22,7 +22,7 @@ BUILD_PACKAGES=(
     build-essential
     pkg-config
     git
-    llvm
+    cmake
     # Python build deps
     libssl-dev
     zlib1g-dev
@@ -50,6 +50,7 @@ rootfs_ready() {
 sdk_ready() {
     local DEST="$1"
     rootfs_ready "$DEST" \
+        && [ -x "$DEST/usr/bin/cmake" ] \
         && [ -x "$DEST/usr/bin/meson" ] \
         && [ -f "$DEST/usr/include/openssl/ssl.h" ] \
         && { [ -f "$DEST/usr/include/ffi.h" ] || [ -f "$DEST/usr/include/x86_64-linux-gnu/ffi.h" ]; }
@@ -113,5 +114,5 @@ esac
 
 echo ""
 echo "Done. You can now build with BuildStream:"
-echo "  bst source track components/python3.bst"
+echo "  bst source track components/python3.bst components/llvm.bst"
 echo "  bst build image/system.bst"

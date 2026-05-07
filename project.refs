@@ -1,10 +1,12 @@
 # BuildStream source refs
 #
 # Source refs are populated by:
-#   bst source track components/python3.bst
+#   bst source track components/python3.bst components/llvm.bst
 #
 # Commit this file after updating to ensure reproducible builds.
 projects:
   minimal-linux:
+    components/llvm.bst:
+    - ref: 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff
     components/python3.bst:
     - ref: f6650f9ad73359051f3e558c2431a109bc016664

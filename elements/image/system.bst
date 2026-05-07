@@ -6,6 +6,7 @@ description: |
   Composition:
     - base/ubuntu  : Ubuntu 24.04 minimal root filesystem (runtime)
     - components/python3 : CPython 3.12 interpreter (built from source)
+    - components/llvm : LLVM toolchain (built from source)
 
   To check out the assembled image:
     bst artifact checkout image/system.bst --directory output/
@@ -13,3 +14,4 @@ description: |
 depends:
   - base/ubuntu.bst
   - components/python3.bst
+  - components/llvm.bst
