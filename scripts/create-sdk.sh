@@ -97,6 +97,5 @@ esac
 
 echo ""
 echo "Done. You can now build with BuildStream:"
-echo "  python3 scripts/fetch-refs.py"
-echo "  bst source track components/python3.bst"
+echo "  bst source track components/qemu.bst components/python3.bst"
 echo "  bst build image/system.bst"

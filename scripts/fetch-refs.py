@@ -66,7 +66,7 @@ def update_project_refs(path: str, element: str, sha: str) -> None:
             data["projects"] = {}
         if "minimal-linux" not in data["projects"] or data["projects"]["minimal-linux"] is None:
             data["projects"]["minimal-linux"] = {}
-        data["projects"]["minimal-linux"][element] = [{"sha256": sha}]
+        data["projects"]["minimal-linux"][element] = [{"ref": sha}]
         with open(path, "w") as fh:
             ry.dump(data, fh)
     except ImportError:
@@ -82,7 +82,7 @@ def update_project_refs(path: str, element: str, sha: str) -> None:
                 found = True
                 skip = True
                 new_lines.append(f"  {element}:\n")
-                new_lines.append(f"  - sha256: {sha}\n")
+                new_lines.append(f"  - ref: {sha}\n")
                 continue
             if skip and line.startswith("  ") and not line.startswith("    "):
                 skip = False
@@ -95,7 +95,7 @@ def update_project_refs(path: str, element: str, sha: str) -> None:
                 out.append(line)
                 if "minimal-linux:" in line:
                     out.append(f"  {element}:\n")
-                    out.append(f"  - sha256: {sha}\n")
+                    out.append(f"  - ref: {sha}\n")
             new_lines = out
         with open(path, "w") as fh:
             fh.writelines(new_lines)

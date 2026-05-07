@@ -36,7 +36,7 @@ elements/
     system.bst           Final image: ubuntu + python3 + qemu (stack)
 scripts/
   create-sdk.sh          Create files/ubuntu-base/ and files/sdk/ via debootstrap
-  fetch-refs.py          Compute SHA-256 ref for the QEMU tarball
+  fetch-refs.py          Optional helper to refresh the QEMU tarball ref
 Makefile                 Convenience build targets
 .github/workflows/
   build.yml              CI: build on every push / pull request
@@ -75,12 +75,12 @@ This uses `debootstrap` to create two Ubuntu 24.04 root filesystems:
 ### 2 – Populate source refs
 
 ```bash
-# Download QEMU tarball and compute its SHA-256 ref
-python3 scripts/fetch-refs.py
-
-# Track the latest CPython v3.12.x git commit
-bst source track components/python3.bst
+# Refresh the exact refs stored in project.refs
+bst source track components/qemu.bst components/python3.bst
 ```
+
+Committed `project.refs` entries are already included in the repository, so
+normal builds do not need this step unless you want to update source versions.
 
 ### 3 – Build
 

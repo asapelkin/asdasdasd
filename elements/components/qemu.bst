@@ -5,7 +5,7 @@ description: |
 
   Source: https://download.qemu.org/qemu-9.0.0.tar.xz
   The sha256 ref is stored in project.refs and updated by:
-    python3 scripts/fetch-refs.py
+    bst source track components/qemu.bst components/python3.bst
 
   QEMU uses Meson internally (via its ./configure Python wrapper).
   We override configure-commands so only QEMU-compatible flags are passed.
@@ -22,7 +22,7 @@ build-depends:
 sources:
   - kind: tar
     url: qemu-dl:qemu-9.0.0.tar.xz
-    # ref is stored in project.refs and updated by scripts/fetch-refs.py
+    # ref is stored in project.refs and updated by bst source track
 
 config:
   # Override configure to use only QEMU-accepted options

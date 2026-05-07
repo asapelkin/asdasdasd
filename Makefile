@@ -24,8 +24,7 @@ files/sdk:
 # ── Source refs ──────────────────────────────────────────────────────────────
 
 sources: files/ubuntu-base files/sdk
-	python3 scripts/fetch-refs.py
-	bst source track components/python3.bst
+	bst source track components/qemu.bst components/python3.bst
 
 # ── Build ─────────────────────────────────────────────────────────────────────
 
