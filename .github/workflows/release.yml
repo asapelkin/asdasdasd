@@ -30,6 +30,17 @@ jobs:
           sudo apt-get install -y --no-install-recommends bubblewrap debootstrap
           pip install -r requirements.txt
 
+      - name: Configure BuildStream sandbox
+        run: |
+          # GitHub Actions runners block RTM_NEWADDR inside new network namespaces,
+          # which causes bwrap's loopback setup to fail. Setting network-access: true
+          # tells bwrap to share the host network namespace instead.
+          mkdir -p ~/.config
+          cat > ~/.config/buildstream.conf << 'EOF'
+          sandbox:
+            network-access: true
+          EOF
+
       # ── Build environment ─────────────────────────────────────────────────
       - name: Create Ubuntu base and SDK rootfs
         run: sudo bash scripts/create-sdk.sh
