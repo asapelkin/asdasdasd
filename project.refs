@@ -1,7 +1,7 @@
 # BuildStream source refs
 #
 # Source refs are populated by:
-#   bst source track components/python3.bst components/llvm.bst
+#   bst source track components/python3.bst components/llvm.bst components/wheelhouse.bst
 #
 # Commit this file after updating to ensure reproducible builds.
 projects:
@@ -10,3 +10,6 @@ projects:
     - ref: 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff
     components/python3.bst:
     - ref: f6650f9ad73359051f3e558c2431a109bc016664
+    components/wheelhouse.bst:
+    - {}
+    - ref: "click==8.3.3\niniconfig==2.3.0\nnumpy==2.4.4\npackaging==26.2\npluggy==1.6.0\npygments==2.20.0\npytest==9.0.3\ntabulate==0.10.0"

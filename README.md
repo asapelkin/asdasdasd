@@ -35,6 +35,8 @@ elements/
     system.bst           Final image: ubuntu + python3 + llvm (stack)
 scripts/
   create-sdk.sh          Create files/ubuntu-base/ and files/sdk/ via debootstrap
+requirements/
+  wheelhouse.txt         Requested Python packages for the BuildStream wheelhouse
 Makefile                 Convenience build targets
 .github/workflows/
   build.yml              CI: build on every push / pull request

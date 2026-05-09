@@ -1,4 +1,4 @@
-kind: manual
+kind: import
 
 description: |
   Python package source wheelhouse staged from PyPI with BuildStream.
@@ -8,14 +8,13 @@ description: |
   pip source.
 
 sources:
+  - kind: local
+    path: requirements/wheelhouse.txt
   - kind: pip
-    packages:
-      - pytest
-      - click
-      - tabulate
-      - numpy
+    url: "pypi:"
+    requirements-files:
+      - wheelhouse.txt
 
 config:
-  install-commands:
-    - mkdir -p "%{install-root}/wheelhouse"
-    - cp -a .bst_pip_downloads/. "%{install-root}/wheelhouse/"
+  source: .bst_pip_downloads
+  target: /wheelhouse
