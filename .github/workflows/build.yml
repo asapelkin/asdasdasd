@@ -45,7 +45,7 @@ jobs:
 
       # ── Source refs ──────────────────────────────────────────────────────
       - name: Track source refs
-        run: bst source track components/python3.bst
+        run: bst source track components/python3.bst components/llvm.bst
 
       # ── Build ─────────────────────────────────────────────────────────────
       - name: Build system image
