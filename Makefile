@@ -10,6 +10,7 @@ help:
 	@echo "  make sources        - Compute/track all source refs"
 	@echo "  make build          - Build the system image with BuildStream"
 	@echo "  make checkout       - Export assembled image to output/"
+	@echo "  make wheelhouse     - Build and check out the Python package wheelhouse"
 	@echo "  make clean          - Remove generated files (does NOT remove files/)"
 
 # ── Prerequisites ────────────────────────────────────────────────────────────
@@ -48,12 +49,18 @@ ownership: files/ubuntu-base files/sdk
 # ── Source refs ──────────────────────────────────────────────────────────────
 
 sources: prereqs sandbox ownership
-	bst source track components/python3.bst components/llvm.bst
+	bst source track components/python3.bst components/llvm.bst components/wheelhouse.bst
 
 # ── Build ─────────────────────────────────────────────────────────────────────
 
 build: prereqs sandbox ownership
 	bst build image/system.bst
+
+wheelhouse: prereqs sandbox
+	rm -rf output/wheelhouse
+	mkdir -p output/wheelhouse
+	bst build components/wheelhouse.bst
+	bst artifact checkout components/wheelhouse.bst --directory output/wheelhouse/
 
 # ── Checkout ─────────────────────────────────────────────────────────────────
 

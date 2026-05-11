@@ -14,6 +14,7 @@ A minimal Linux distribution based on **Ubuntu 24.04** (Noble Numbat) with
 | Build SDK | Ubuntu 24.04 + dev tools | `debootstrap --variant=buildd` |
 | Python    | 3.12.x  | Compiled from CPython git source |
 | LLVM      | 18.1.x  | Compiled from llvm-project git source |
+| Wheelhouse | PyPI package sources | Fetched by BuildStream pip source |
 
 ---
 
@@ -29,10 +30,13 @@ elements/
   components/
     python3.bst          CPython 3.12 – autotools build against sdk.bst
     llvm.bst             LLVM 18.1 – CMake build against sdk.bst
+    wheelhouse.bst       PyPI source wheelhouse for pytest/click/tabulate/numpy
   image/
     system.bst           Final image: ubuntu + python3 + llvm (stack)
 scripts/
   create-sdk.sh          Create files/ubuntu-base/ and files/sdk/ via debootstrap
+requirements/
+  wheelhouse.txt         Requested Python packages for the BuildStream wheelhouse
 Makefile                 Convenience build targets
 .github/workflows/
   build.yml              CI: build on every push / pull request
@@ -72,7 +76,7 @@ This uses `debootstrap` to create two Ubuntu 24.04 root filesystems:
 
 ```bash
 # Refresh the exact refs stored in project.refs
-bst source track components/python3.bst components/llvm.bst
+bst source track components/python3.bst components/llvm.bst components/wheelhouse.bst
 ```
 
 Committed `project.refs` entries are already included in the repository, so
@@ -85,8 +89,9 @@ bst build image/system.bst
 ```
 
 The first build compiles Python and LLVM from source inside BuildStream's
-isolated sandbox (powered by bubblewrap). Subsequent builds reuse the artifact
-cache and are nearly instant.
+isolated sandbox (powered by bubblewrap), and fetches the Python package
+wheelhouse through BuildStream source tracking. Subsequent builds reuse the
+artifact cache and are nearly instant.
 
 ### 4 – Check out the image
 
@@ -101,6 +106,7 @@ You can also use the Makefile shortcuts:
 ```bash
 make all      # installs missing prerequisites, then runs steps 1-4
 make build    # build only
+make wheelhouse # build and export just the Python package wheelhouse
 make checkout # export image to output/
 make clean    # remove output/
 ```
@@ -154,7 +160,8 @@ The release workflow will:
 1. `base/sdk.bst` imports the Ubuntu 24.04 SDK rootfs as the build environment
 2. `components/python3.bst` compiles CPython inside the SDK sandbox
 3. `components/llvm.bst` compiles LLVM inside the SDK sandbox
-4. `image/system.bst` merges the Ubuntu base + Python + LLVM into one image
+4. `components/wheelhouse.bst` fetches pytest, click, tabulate, numpy and all transitive Python package sources
+5. `image/system.bst` merges the Ubuntu base + Python + LLVM + wheelhouse into one image
 
 ---
 
